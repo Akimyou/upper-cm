@@ -1,0 +1,32 @@
+{
+  "name": "upper-cm",
+  "version": "1.0.0",
+  "description": "Upper git submodule (common-module) util for node.",
+  "main": "index.js",
+  "bin": {
+    "cross-env": "dist/bin/cross-env.js",
+    "cross-env-shell": "dist/bin/cross-env-shell.js"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akimyou/upper-cm.git"
+  },
+  "keywords": [
+    "node",
+    "git",
+    "submodule",
+    "common-module"
+  ],
+  "author": "akimyou@icloud.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Akimyou/upper-cm/issues"
+  },
+  "homepage": "https://github.com/Akimyou/upper-cm#readme",
+  "dependencies": {
+    "cross-env": "^5.1.3"
+  }
+}
