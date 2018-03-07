@@ -8,7 +8,8 @@
     "cross-env-shell": "dist/bin/cross-env-shell.js"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "test:ci": "node index.js"
   },
   "repository": {
     "type": "git",

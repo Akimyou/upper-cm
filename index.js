@@ -4,16 +4,18 @@ var path = require('path')
 var defaultTarget = 'common-module'
 var defaultDeep = 3
 
-function getPath (option) {
+function getPath (option, recursive) {
   option = option || {}
-
-  this.target = this.target || defaultTarget
-  this.deep = this.deep || defaultDeep
-  this.curPath = this.curPath || __dirname
-
   option.prefix = option.prefix || ''
 
-  if (!this.deep) return new Error('over deep ' + this.deep)
+  if (!recursive) {
+    this.target = this.target || defaultTarget
+    this.deep = this.deep || defaultDeep
+    this.initDeep = this.deep
+    this.curPath = this.curPath || __dirname
+  }
+
+  if (!this.deep) return new Error('over deep ' + this.initDeep)
 
   this.curPath = path.join(this.curPath, option.prefix)
 
@@ -25,34 +27,34 @@ function getPath (option) {
   }
 
   this.deep--
-
-  return getPath.bind(this)({ prefix: '..' })
+  return getPath.bind(this)({ prefix: '..' }, true)
 }
 
 var backend = {
   getPathNodeModules (option) {
     option = option || {}
     option.target = option.target || 'node_modules'
-    return getPath.bind(option)({
+    var temp = getPath.bind(option)({
       prefix: option.prefix
     })
+    if (typeof temp === 'string') {
+      return temp
+    } else {
+      console.error(temp)
+    }
   },
   resolve (sub, option) {
     sub = sub || ''
     option = option || {}
-    return path.join(getPath.bind(option)({
+    var temp = getPath.bind(option)({
       prefix: option.prefix
-    }), sub)
+    })
+    if (typeof temp === 'string') {
+      return path.join(temp, sub)
+    } else {
+      console.error(temp)
+    }
   }
 }
-
-;(function () {
-  var options = {
-    target: process.argv[2],
-    deep: process.argv[3]
-  }
-  var nodeModulesPath = backend.getPathNodeModules(options)
-  console.log(nodeModulesPath)
-})()
 
 module.exports = backend
