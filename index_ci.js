@@ -1,15 +1,27 @@
+#!/usr/bin/env node
+
 var crossEnv = require('cross-env')
 
 var upperCm = require('./index.js')
 
 var args = process.argv.slice(2)
-var argsOther = process.argv.slice(4)
+var argsOther = process.argv.slice(2)
 var argsNext = []
-
-var options = {
-  target: args[0],
-  deep: args[1]
-}
+var options = (function () {
+  var str = args[0]
+  var arr = []
+  if (str && str.indexOf('-uc:') !== -1) {
+    str = str.replace('-uc:', '')
+    arr = str.split(',')
+  }
+  if (arr.length) {
+    argsOther = process.argv.slice(3)
+  }
+  return {
+    deep: arr[0],
+    target: arr[1]
+  }
+})()
 
 var result = upperCm.getPathNodeModules(options)
 
